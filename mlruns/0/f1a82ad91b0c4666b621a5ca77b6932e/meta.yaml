@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/adpar/practica-2-adpardo1/mlruns/0/f1a82ad91b0c4666b621a5ca77b6932e/artifacts
+end_time: 1748221911445
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f1a82ad91b0c4666b621a5ca77b6932e
+run_name: enchanting-bee-296
+run_uuid: f1a82ad91b0c4666b621a5ca77b6932e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748221901790
+status: 3
+tags: []
+user_id: adpar

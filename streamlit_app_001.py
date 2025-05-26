@@ -1,29 +1,57 @@
 import streamlit as st
-import mlflow.sklearn
-import numpy as np
+import joblib
+import pandas as pd
 
-st.title("Predicción de Diabetes")
+st.title("Evaluación de Riesgo Crediticio")
 
-# Configurar conexión con MLflow Tracking Server
-pass
+# Carga el pipeline entrenado
+pipeline = joblib.load('pipeline_credit_risk.pkl')
 
-# Cargar modelo desde el Model Registry, revise el ejemplo de flask
-pass
+# Inputs del usuario
+person_emp_length = st.slider("Años de empleo", 0, 50, 5)
 
-# Deslizadores para cada input del modelo
-pregnancies = st.slider("Número de embarazos", 0, 20, 1)
-glucose = st.slider("Nivel de glucosa", 0, 200, 100)
-blood_pressure = st.slider("Presión arterial", 0, 122, 70)
-skin_thickness = st.slider("Grosor del pliegue cutáneo", 0, 100, 20)
-insulin = st.slider("Nivel de insulina", 0, 846, 80)
-bmi = st.slider("Índice de masa corporal (BMI)", 0.0, 70.0, 25.0)
-dpf = st.slider("Diabetes Pedigree Function", 0.0, 2.5, 0.5)
-age = st.slider("Edad", 10, 100, 30)
+person_home_ownership = st.selectbox(
+    "Propiedad de la vivienda",
+    ["OWN", "RENT", "MORTGAGE", "OTHER", "NONE"]
+)
 
-# Predicción
-if st.button("Predecir"):
-    entrada = np.array([[pregnancies, glucose, blood_pressure, skin_thickness,
-                         insulin, bmi, dpf, age]])
-    pred = model.predict(entrada)[0]
-    st.markdown("### Resultado:")
-    st.success("Tiene diabetes" if pred == 1 else "No tiene diabetes")
+loan_intent = st.selectbox(
+    "Intención del préstamo",
+    ["PERSONAL", "EDUCATION", "MEDICAL", "VENTURE", "DEBTCONSOLIDATION", "HOMEIMPROVEMENT", "OTHER"]
+)
+
+loan_grade = st.selectbox(
+    "Calificación del préstamo",
+    ["A", "B", "C", "D", "E", "F", "G"]
+)
+
+cb_person_default_on_file = st.selectbox(
+    "Registro de incumplimiento en archivo crediticio",
+    ["Y", "N"]
+)
+
+loan_amnt = st.number_input("Monto del préstamo", min_value=1000, max_value=50000, value=10000, step=500)
+
+loan_int_rate = st.number_input("Tasa de interés (%)", min_value=0.0, max_value=50.0, value=10.0, step=0.1)
+
+# Crear dataframe de entrada con las columnas en el orden esperado por el pipeline
+input_dict = {
+    'person_home_ownership': [person_home_ownership],
+    'loan_intent': [loan_intent],
+    'loan_grade': [loan_grade],
+    'cb_person_default_on_file': [cb_person_default_on_file],
+    'person_emp_length': [person_emp_length],
+    'loan_amnt': [loan_amnt],
+    'loan_int_rate': [loan_int_rate],
+}
+
+input_df = pd.DataFrame(input_dict)
+
+if st.button("Predecir riesgo de incumplimiento"):
+    pred = pipeline.predict(input_df)[0]
+    proba = pipeline.predict_proba(input_df)[0][1]
+
+    if pred == 1:
+        st.error(f"Riesgo alto de incumplimiento. Probabilidad: {proba:.2f}")
+    else:
+        st.success(f"Riesgo bajo de incumplimiento. Probabilidad: {proba:.2f}")

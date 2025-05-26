@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/adpar/practica-2-adpardo1/mlruns/527840746989668781/dd37d0b0fcc1400c9d2aa873c38bb9c3/artifacts
+end_time: 1748222805652
+entry_point_name: ''
+experiment_id: '527840746989668781'
+lifecycle_stage: active
+run_id: dd37d0b0fcc1400c9d2aa873c38bb9c3
+run_name: salty-crane-693
+run_uuid: dd37d0b0fcc1400c9d2aa873c38bb9c3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748222798045
+status: 3
+tags: []
+user_id: adpar

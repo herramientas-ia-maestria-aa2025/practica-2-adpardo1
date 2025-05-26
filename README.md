@@ -1,37 +1,69 @@
-# practica002-aa2025
+# Evaluación de Riesgo Crediticio
 
-## Pasos a seguir
+Este proyecto implementa un modelo de aprendizaje automático para predecir el riesgo de incumplimiento crediticio. Incluye el entrenamiento del modelo, creación de un pipeline, desarrollo de una API REST con Flask y una interfaz de usuario con Streamlit para facilitar la interacción.
+## Contenido
 
-1. Reusar un entorno previo generado; para que no tenga que instalar todas las librerías.
+    train.py: Script para entrenar el modelo con pipeline, preprocesamiento y guardar el pipeline.
 
-2. Ejecutar o levantar el mlflow server en el puerto **9090**, dentro de la carpeta clonada.
+    main.py: Entrenamiento alternativo con MLflow y guardado de codificadores.
 
-3. Ejecutar jupyter-lab y trabajar sobre **practica0002.ipynb**, dentro de la carpeta clonada.
+    app.py: API REST en Flask para predicciones, carga modelo y codificadores.
 
-  3.1. Analizar el contenido del archivo ipynb.
+    streamlit_app.py: Interfaz web interactiva para ingreso de datos y predicción.
 
-  3.2. Ingresar la información faltante en el archivo.
+    data/credit_risk_dataset.csv: Dataset con datos de préstamos y clientes.
 
-  3.3. Considerar el proceso que se requiere para usar archivo: **logreg_variaciones_educativas.csv**; es fundamental
+    Codificadores (*_encoder.pkl) para variables categóricas.
 
-4. Verificar que las corridas (run) estén en el server de MLflow (subir capturas de imágenes que demuestren la ejecución), usar la carpeta **imgs**
+    Modelo serializado pipeline_credit_risk.pkl.
 
-5. Registrar los modelos en MLflow (subir capturas de imágenes que demuestren los modelos registrados), usar la carpeta **imgs**
+## Requisitos
 
-6. Instalar la librería streamlit, usar **pip install streamlit**
+    Python 3.8+
 
-7. Revisar el contendido de **streamlit_app_001.py**
+    Paquetes: pandas, scikit-learn, joblib, mlflow, flask, streamlit
 
-8. Agregar la información faltante en **streamlit_app_001.py**, usted seleccione el modelo que requiera usar del MLflow. Recuerde que en alguna parte de la aplicación de streamlit debe aparecer su nombre.
+Puedes instalar las dependencias con:
 
-9. Ejecutar el comando
-```
-streamlit run streamlit_app_001.py
-```
-Jugar con los valores y revisar la predicción (recuerde que es un ejemplo educativo, los datos pueden ser muy ilógicos)
+pip install -r requirements.txt
 
-10. Agregar una captura de pantalla de la ejecución de streamlit, (subir capturas de imágenes que demuestren la ejecución), usar la carpeta **imgs**
+## Uso
+### Entrenamiento
 
-11. Subir los cambios realizados al repositorio
+Entrena el modelo y guarda el pipeline con:
 
-12. Donde el docente indique, debe subir el enlace respectivo del repositorio de GitHub.
+python train.py
+
+El modelo y los encoders se guardan para su posterior uso.
+API Flask
+
+Para ejecutar la API REST que recibe peticiones POST para predecir:
+
+python app.py
+
+La API correrá en http://localhost:5000.
+
+### Ejemplo de endpoint:
+
+    GET / — Estado de la API.
+
+    POST /predict — Recibe JSON con datos y retorna predicción y probabilidad.
+
+## Interfaz con Streamlit
+
+Para ejecutar la app web interactiva:
+
+streamlit run streamlit_app.py
+
+Podrás ingresar los datos del préstamo y obtener predicción inmediata de riesgo.
+Estructura de Datos
+
+## El modelo usa las siguientes variables:
+    Variable	Tipo	Descripción
+    person_emp_length	Numérica	Años de empleo
+    person_home_ownership	Categórica	Tipo de propiedad de vivienda
+    loan_intent	Categórica	Intención del préstamo
+    loan_grade	Categórica	Calificación del préstamo
+    cb_person_default_on_file	Categórica	Registro de incumplimiento (Y/N)
+    loan_amnt	Numérica	Monto del préstamo
+    loan_int_rate	Numérica	Tasa de interés (%)
