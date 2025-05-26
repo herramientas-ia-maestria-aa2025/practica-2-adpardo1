@@ -1,6 +1,6 @@
 # Evaluación de Riesgo Crediticio
 
-Este proyecto implementa un modelo de aprendizaje automático para predecir el riesgo de incumplimiento crediticio. Incluye el entrenamiento del modelo, creación de un pipeline, desarrollo de una API REST con Flask y una interfaz de usuario con Streamlit para facilitar la interacción.
+Esta practica implementa un modelo de aprendizaje automático para predecir el riesgo de incumplimiento crediticio. Incluye el entrenamiento del modelo, creación de un pipeline, desarrollo de una API REST con Flask y una interfaz de usuario con Streamlit para facilitar la interacción.
 ## Contenido
 
     train.py: Script para entrenar el modelo con pipeline, preprocesamiento y guardar el pipeline.
@@ -23,23 +23,34 @@ Este proyecto implementa un modelo de aprendizaje automático para predecir el r
 
     Paquetes: pandas, scikit-learn, joblib, mlflow, flask, streamlit
 
-Puedes instalar las dependencias con:
+## Uso de MLflow
 
-pip install -r requirements.txt
+La practica utiliza **MLflow** para la gestión y seguimiento de experimentos de machine learning, así como para el registro y despliegue de modelos.
 
+### ¿Cómo se usó?
+
+- Se configuró MLflow para registrar el modelo entrenado con sus métricas y parámetros.
+- El servidor de MLflow se ejecuta localmente en el puerto **9090**, lo que permite visualizar los experimentos desde la interfaz web en:  
+  [http://localhost:9090](http://localhost:9090)
+- Durante el entrenamiento (`main.py`), se registra un modelo dentro de un experimento:
+
+```python
+mlflow.set_experiment("credit_risk_experiment")
+with mlflow.start_run() as run:
+    mlflow.sklearn.log_model(model, "model")
+    print(f"Run ID: {run.info.run_id}")
+```
 ## Uso
 ### Entrenamiento
 
-Entrena el modelo y guarda el pipeline con:
+Se entrena el modelo y guarda el pipeline con:
 
-python train.py
+    python train.py
 
 El modelo y los encoders se guardan para su posterior uso.
-API Flask
+API Flask para ejecutar la API REST que recibe peticiones POST para predecir:
 
-Para ejecutar la API REST que recibe peticiones POST para predecir:
-
-python app.py
+    python app.py
 
 La API correrá en http://localhost:5000.
 
@@ -51,19 +62,21 @@ La API correrá en http://localhost:5000.
 
 ## Interfaz con Streamlit
 
-Para ejecutar la app web interactiva:
+Para ejecutar la app web de **Streamlit**:
 
-streamlit run streamlit_app.py
+    streamlit run streamlit_app.py
 
-Podrás ingresar los datos del préstamo y obtener predicción inmediata de riesgo.
-Estructura de Datos
+Se puede ingresar los datos del préstamo y obtener predicción inmediata de riesgo.
 
-## El modelo usa las siguientes variables:
-    Variable	Tipo	Descripción
-    person_emp_length	Numérica	Años de empleo
-    person_home_ownership	Categórica	Tipo de propiedad de vivienda
-    loan_intent	Categórica	Intención del préstamo
-    loan_grade	Categórica	Calificación del préstamo
-    cb_person_default_on_file	Categórica	Registro de incumplimiento (Y/N)
-    loan_amnt	Numérica	Monto del préstamo
-    loan_int_rate	Numérica	Tasa de interés (%)
+## Estructura de Datos
+
+### El modelo usa las siguientes variables:
+| Variable                   | Tipo         | Descripción                       |
+|----------------------------|--------------|---------------------------------|
+| person_emp_length           | Numérica     | Años de empleo                  |
+| person_home_ownership       | Categórica   | Tipo de propiedad de vivienda  |
+| loan_intent                | Categórica   | Intención del préstamo          |
+| loan_grade                 | Categórica   | Calificación del préstamo       |
+| cb_person_default_on_file  | Categórica   | Registro de incumplimiento (Y/N)|
+| loan_amnt                  | Numérica     | Monto del préstamo              |
+| loan_int_rate              | Numérica     | Tasa de interés (%)             |
